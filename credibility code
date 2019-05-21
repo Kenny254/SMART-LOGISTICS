@@ -1,0 +1,42 @@
+#include <SoftwareSerial.h>
+SoftwareSerial mySerial(10, 11);
+int cont=4;
+int contstate;
+void setup(){
+  pinMode(cont,INPUT_PULLUP);
+  Serial.begin(9600);
+  mySerial.begin(9600);
+ Serial.println("initializing....");
+ delay(1000);
+ mySerial.println("AT");
+ updateSerial();
+ mySerial.println("AT+CMGF=1");
+ updateSerial();
+ mySerial.println("AT+CMGS=\"+254721934493\"");
+ updateSerial();
+// mySerial.println("THE EXAM PACKAGE MFA-2433423 HAS BEEN VOIDED");
+// updateSerial();
+// mySerial.write(26);
+}
+
+void loop(){
+  contstate=digitalRead(cont);
+  if(contstate==1){
+   
+     mySerial.println("THE EXAM PACKAGE MFA-2433423 HAS BEEN VOIDED");
+ updateSerial();
+ mySerial.write(26);
+ delay(60000);
+  }
+}
+
+void updateSerial(){
+  delay(500);
+  while(Serial.available())
+  {
+    mySerial.write(Serial.read());
+  }
+  while(mySerial.available()){
+    Serial.write(mySerial.read());
+  }
+}
